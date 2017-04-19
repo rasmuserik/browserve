@@ -1,11 +1,16 @@
-// # Under development not ready yet...
+// # Browserve 
 //
+// Server-side browser daemons, and pubsub.  This application does two things:
 //
+// 1. Runs a set of web-apps as daemons on the server, based on a JSON config file on a given url.
+// 2. Hosts a simple websocket anycast pubsub service, that allows communication between web apps.
+//
+// When this is combined with a CouchDB, you have a fully generic backend, which support many application needs.
+//
+// ## Server-side browser daemons
 
 let fetch = require('node-fetch');
-const {app, BrowserWindow} = require('electron');
-const path  = require('path');
-const url = require('url');
+let {app, BrowserWindow} = require('electron');
 
 app.disableHardwareAcceleration()
 
@@ -48,15 +53,17 @@ app.on('ready', function() {
   });
 });
 
-var wsClients = new Map();
+// ## Websocket anycast pubsub
+
+let wsClients = new Map();
 
 startServer = () => {
-  var app = require('express')();
+  let app = require('express')();
   app.use(require('express').static(__dirname));
 
-  var server = require('http').createServer(app);
+  let server = require('http').createServer(app);
 
-  var wss = new (require('ws').Server)({
+  let wss = new (require('ws').Server)({
     perMessageDeflate: false,
     server: server
   });
@@ -69,18 +76,26 @@ startServer = () => {
         .update(msg, 'latin1')
         .digest('base64').slice(0, 32);
 
-      wsClients.set(nid, ws);
+      let clients = wsClients.get(nid) || [];
+      clients.push(ws);
+      wsClients.set(nid, clients);
       ws.send(nid);
       ws.on('message', (msg) => {
         let clients = wsClients.get(msg.slice(0, 32));
-        if(client) {
-          client.send(msg.slice(32));
+        if(clients) {
+          clients[clients.length * Math.random() | 0].send(msg.slice(32));
         }
       });
     });
     ws.on('close', () => {
       if(nid) {
-        wsClients.delete(nid);
+        let clients = wsClients.get(nid);
+        clients = clients.filter(o => o !== ws);
+        if(clients.length > 0) {
+          wsClients.set(nid, clients);
+        } else {
+          wsClients.delete(nid);
+        }
       }
     });
   });

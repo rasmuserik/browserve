@@ -3,6 +3,6 @@
 		DO NOT EDIT 
 -->
 # browserve
-Server-side web-clients
+Server-side application: browser daemons, and anycast pubsub
 
 ***See <http://browserve.solsort.com> for details.***
