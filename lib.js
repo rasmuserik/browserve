@@ -1,8 +1,5 @@
 let main = (() => {
   var _ref = _asyncToGenerator(function* (cfgText) {
-
-    // Restart if config has changed
-
     let checkChange = (() => {
       var _ref2 = _asyncToGenerator(function* () {
         let config = yield fetch(configUrl);
@@ -47,6 +44,13 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 // When this is combined with a CouchDB, you have a fully generic backend, which support many application needs.
 //
 // ## Server-side browser daemons
+//
+// Configuration:
+//
+// - `BROWSER_CONFIG` environment variable defines an url, where the config can be fetched. See`sample-config.json` for example configuration.
+//
+// The service will regularly reload the configuration, and stop(restart) itself if it changes.
+//
 
 let fetch = require('node-fetch');
 let { app, BrowserWindow } = require('electron');
@@ -68,6 +72,18 @@ app.on('ready', function () {
 });
 
 // ## Websocket anycast pubsub
+//
+// This server the repository data, and a websocket endpoints.
+// Each connection to the websocket is listening to one channel.
+// Each channel has a:
+//
+// - secret id which is used for subscribing.
+// - public id which is used for sending messages.
+//
+// The public ids are strings of length 32. (192 bit when base64 encoded).
+//
+// The first message sent by the client, is the secret id, whereafter the server will return the public id for the channel. Thereafter the client can emit messages to any channel, by sending the public channel id concatenated by the actual message to the websocket.
+//
 
 let wsClients = new Map();
 
