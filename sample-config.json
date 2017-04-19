@@ -1,0 +1,15 @@
+{
+  "configReload": 1000,
+  "restartTime": 5000,
+  "windowConfig": {
+    "nodeIntegration": false,
+    "show": false,
+    "webPreferences": {"webSecurity": false},
+    "webgl": false,
+    "images": false,
+    "devTools": false
+  },
+  "apps": [
+    {"url": "http://forsider.solsort.com/"}
+  ]
+}

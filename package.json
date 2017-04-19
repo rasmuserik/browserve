@@ -1,9 +1,11 @@
 {
   "name": "browserve",
+  "description": "Server-side web-clients",
   "scripts": {
     "release": "simple-javascript release",
     "dev": "simple-javascript dev",
-    "test": "simple-javascript test"
+    "test": "simple-javascript test",
+    "start": "ELECTRON_ENABLE_LOGGING=1 xvfb-run -a electron browserve.js"
   },
   "devDependencies": {
     "simple-javascript": "*"
@@ -14,5 +16,8 @@
   "repository": "github:solsort/browserve",
   "version": "0.0.1",
   "homepage": "http://browserve.solsort.com",
-  "description": ""
+  "dependencies": {
+    "electron": "^1.6.5",
+    "node-fetch": "^1.6.3"
+  }
 }
