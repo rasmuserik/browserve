@@ -1,6 +1,6 @@
 {
-  "configReload": 1000,
-  "restartTime": 5000,
+  "configReload": 5000,
+  "restartTime": 3600000,
   "windowConfig": {
     "nodeIntegration": false,
     "show": false,

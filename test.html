@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>browserve</title>
+    <link rel=icon href=icon.png>
+    <meta name="viewport" content="width=device-width">
+    <style>
+body {
+  font-family: sans-serif;
+}
+    </style>
+  </head>
+  <body>
+    <div>node-id: <span id=nodeId></span></div>
+    dst: <input id=dst />
+    <button id=send >send</button>
+    <script>
+var ws = new WebSocket('ws://localhost:8888/');
+ws.onopen = () => {
+  console.log('open');
+  ws.send(Math.random().toString()); 
+};
+ws.onmessage = (e) => {
+  nodeId.innerHTML = e.data;
+  ws.onmessage = (e) => {
+    alert(e.data);
+  }
+}
+send.onclick = () => {
+  ws.send(dst.value + ' hi');
+}
+
+    </script>
+  </body>
+</html>

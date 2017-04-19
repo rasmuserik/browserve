@@ -18,6 +18,8 @@
   "homepage": "http://browserve.solsort.com",
   "dependencies": {
     "electron": "^1.6.5",
-    "node-fetch": "^1.6.3"
+    "express": "^4.15.2",
+    "node-fetch": "^1.6.3",
+    "ws": "^2.2.3"
   }
 }
